@@ -27,7 +27,7 @@ data "terraform_remote_state" "evplan_id" {
 module "evpla_ne" {
   source                = "git::github.com/Eqix-ProjectX/terraform-equinix-virtualconnection-evplan.git"
   connection_name       = "evplan-to-ne"
-  notifications_emails  = var.emails
+  notifications_emails  = var.notifications_emails
   bandwidth             = 50
   purchase_order_number = var.purchase_order_number
   device_uuid           = data.terraform_remote_state.vd_uuid.outputs.vd_uuid
