@@ -31,7 +31,7 @@ module "evpla_ne" {
   bandwidth             = 50
   purchase_order_number = var.purchase_order_number
   device_uuid           = data.terraform_remote_state.vd_uuid.outputs.vd_uuid
-  interface_number      = 6
+  interface_number      = 8
   network_id            = data.terraform_remote_state.evplan_id.outputs.evplan_id
   project_id            = var.project_id
 }
