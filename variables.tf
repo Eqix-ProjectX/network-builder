@@ -1,4 +1,4 @@
-variable "username" {}
+/*variable "username" {}
 variable "int" {}
 variable "int_desc" {}
 variable "bw" {}
@@ -11,7 +11,7 @@ variable "neighbor_desc_sec" {}
 variable "pri_vc" {}
 variable "sec_vc" {}
 variable "emails" {}
-variable "connection_name" {}
+variable "connection_name" {}*/
 variable "purchase_order_number" {}
 
 
