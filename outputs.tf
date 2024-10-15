@@ -22,11 +22,11 @@
 #   value = module.ne.ssh_ip_vd_sec
 # }
 
-output "token_pri" {
+/*output "token_pri" {
   value     = equinix_metal_connection.vrf2vd.service_tokens[0].id
   sensitive = true
 }
 output "token_sec" {
   value     = equinix_metal_connection.vrf2vd.service_tokens[1].id
   sensitive = true
-}
+}*/
