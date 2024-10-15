@@ -307,7 +307,7 @@ module "FCRcreation" {
 
 
 ##vipin - to create Azure Service Key 
-resource "azurerm_express_route_circuit" "ERSkey_Creation_process" {
+/*resource "azurerm_express_route_circuit" "ERSkey_Creation_process" {
   name                  = var.ERCircuitName
   resource_group_name   = var.Azureresourcegroupname
   location              = var.Azurelocation
@@ -323,10 +323,10 @@ resource "azurerm_express_route_circuit" "ERSkey_Creation_process" {
   tags = {
     environment = "var.environment"
   }
-}
+}*/
 
 ##vipin - to create Layer2 connection from FCR to Azure
-resource "equinix_fabric_connection" "L2_FCRSV_to_Azure" {
+/*resource "equinix_fabric_connection" "L2_FCRSV_to_Azure" {
   name = "L2_FCRSV_to_Azure"
   type = "IP_VC"
   notifications {
@@ -362,3 +362,4 @@ resource "equinix_fabric_connection" "L2_FCRSV_to_Azure" {
     }
   }
 }
+*/
