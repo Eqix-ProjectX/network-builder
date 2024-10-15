@@ -253,7 +253,7 @@ resource "equinix_metal_virtual_circuit" "peer_sec" {
 */
 
 ##vipin - module to spin up FCR
-module "FCRcreation" {
+/*module "FCRcreation" {
   source               = "github.com/Eqix-ProjectX/network-apac.git"
   FCRname              = var.FCRRoutername
   FCRlocation          = var.FCRlocation
@@ -265,7 +265,7 @@ module "FCRcreation" {
   Equinixprojectid     = var.FCRprojectid
   account_number       = var.FCRaccountnumber
 
-}
+}*/
 
 ##vipin - to create Layer2 connection from FCR to AWS 
 /*resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
