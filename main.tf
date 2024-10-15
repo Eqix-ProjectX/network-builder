@@ -50,10 +50,10 @@ data "terraform_remote_state" "bgp" {
 }
 
 locals {
-  ipv4_vrf_pri   = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges[1], 1)
-  ipv4_vrf_sec   = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges_sec[1], 1)
-  ipv4_int_pri      = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges[1], 2)
-  ipv4_int_sec      = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges_sec[1], 2)
+  ipv4_vrf_pri = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges[1], 1)
+  ipv4_vrf_sec = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges_sec[1], 1)
+  ipv4_int_pri = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges[1], 2)
+  ipv4_int_sec = cidrhost(data.terraform_remote_state.bgp.outputs.vrf_ranges_sec[1], 2)
 }
 
 # IOS-XE configuration
@@ -254,21 +254,21 @@ resource "equinix_metal_virtual_circuit" "peer_sec" {
 
 ##vipin - module to spin up FCR
 module "FCRcreation" {
-    source = "github.com/Eqix-ProjectX/network-apac.git"
-    FCRname = var.FCRRoutername
-    FCRlocation = var.FCRlocation
-    FCRtype = "XF_ROUTER"
-    emails = var.FCRemail
-    Equinixpurchaseorder = var.FCRpurchaseorder
-    FCRmetrocode = var.FCRmetrocode
-    FCRpackage = "STANDARD"
-    Equinixprojectid = var.FCRprojectid
-    account_number = var.FCRaccountnumber
+  source               = "github.com/Eqix-ProjectX/network-apac.git"
+  FCRname              = var.FCRRoutername
+  FCRlocation          = var.FCRlocation
+  FCRtype              = "XF_ROUTER"
+  emails               = var.FCRemail
+  Equinixpurchaseorder = var.FCRpurchaseorder
+  FCRmetrocode         = var.FCRmetrocode
+  FCRpackage           = "STANDARD"
+  Equinixprojectid     = var.FCRprojectid
+  account_number       = var.FCRaccountnumber
 
 }
 
 ##vipin - to create Layer2 connection from FCR to AWS 
-resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
+/*resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
   name = "L2_FCRSG_to_AWS"
   type = "IP_VC"
   notifications {
@@ -303,7 +303,7 @@ resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
       }
     }
   }
-}
+}*/
 
 
 ##vipin - to create Azure Service Key 
