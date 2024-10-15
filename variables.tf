@@ -15,15 +15,15 @@ variable "connection_name" {}
 
 
 #vipin - aws details 
-variable "aws_access_key" {}
+/*variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "profile_uuid" {}
 variable "awslocation" {}
 variable "seller_region" {}
-variable "authentication_key" {}
+variable "authentication_key" {}*/
 
 #vipin - azure details
-variable "azure_client_id" {}
+/*variable "azure_client_id" {}
 variable "azure_client_secret" {}
 variable "azure_tenant_id" {}
 variable "azure_subscription_id" {}
@@ -34,11 +34,11 @@ variable "Azurepeeringlocation" {}
 variable "ERbandwidth" {}
 variable "environment" {}
 variable "FCRtoAzurespeed" {}
-variable "Azuremetrocode" {}
+variable "Azuremetrocode" {}*/
 
 
 #vipin ecx details 
-variable "ecx_access_key" {}
+/*variable "ecx_access_key" {}
 variable "ecx_secret_key" {}
 variable "ecx_auth_token" {}
 variable "FCRtoAWSspeed" {}
@@ -51,3 +51,4 @@ variable "purchase_order_number" {}
 variable "FCRRoutername" {}
 variable "FCRlocation" {}
 variable "FCRemail" {}
+*/
