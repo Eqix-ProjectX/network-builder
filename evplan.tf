@@ -23,6 +23,7 @@ data "terraform_remote_state" "evplan_id" {
 }
 
 // connection between evplan and network edge
+// comment
 module "evpla_ne" {
   source                = "git::github.com/Eqix-ProjectX/terraform-equinix-virtualconnection-evplan.git"
   connection_name       = "evplan-to-ne"
