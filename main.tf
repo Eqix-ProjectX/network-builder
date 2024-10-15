@@ -17,7 +17,7 @@ terraform {
   }
 }
 
-provider "iosxe" {
+/*provider "iosxe" {
   alias    = "vd_pri"
   username = var.username
   password = data.terraform_remote_state.ne.outputs.vd_password
@@ -119,7 +119,7 @@ resource "iosxe_bgp_neighbor" "neighbor_sec" {
   shutdown                = false
   disable_connected_check = false
   log_neighbor_changes    = true
-}
+}*/
 
 # resource "iosxe_save_config" "write_pri" {
 #   provider = iosxe.vd_pri
@@ -136,7 +136,7 @@ resource "iosxe_bgp_neighbor" "neighbor_sec" {
 #   ]
 # }
 
-resource "equinix_fabric_connection" "vd2vrf_pri" {
+/*resource "equinix_fabric_connection" "vd2vrf_pri" {
   name = var.pri_vc
   type = "EVPL_VC"
   redundancy {
@@ -199,7 +199,7 @@ resource "equinix_fabric_connection" "vd2vrf_sec" {
     }
   }
 }
-
+*/
 /*
 resource "time_sleep" "wait_2_min" {
   create_duration = "2m"
@@ -210,7 +210,7 @@ resource "time_sleep" "wait_2_min" {
 }
 */
 
-resource "equinix_metal_connection" "vrf2vd" {
+/*resource "equinix_metal_connection" "vrf2vd" {
   name          = var.connection_name
   project_id    = var.project_id
   metro         = var.metro_code
@@ -222,7 +222,7 @@ resource "equinix_metal_connection" "vrf2vd" {
     data.terraform_remote_state.bgp.outputs.vrf_sec
   ]
   service_token_type = "z_side"
-}
+}*/
 
 /* commented out portion of BGP peering setup for now -TF not supported-
 resource "equinix_metal_virtual_circuit" "peer_pri" {
