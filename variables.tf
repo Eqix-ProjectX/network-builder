@@ -12,6 +12,7 @@ variable "pri_vc" {}
 variable "sec_vc" {}
 variable "emails" {}
 variable "connection_name" {}
+variable "purchase_order_number" {}
 
 
 #vipin - aws details 
