@@ -1,5 +1,5 @@
 ##vipin - module to spin up FCR
-data "terraform_remote_state" "fcr_id" {
+/*data "terraform_remote_state" "fcr_id" {
   backend = "remote"
 
   config = {
@@ -54,16 +54,16 @@ locals {
 
 
   z_side_list = [
-    for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side : 
+    for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side :
     tolist(z.access_point)[0]
-   
+
   ]
 
-    provider_connection_ids = [
+  provider_connection_ids = [
     for access_point in [
       for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side : tolist(z.access_point)[0]
     ] : access_point.provider_connection_id
-  ]  
+  ]
 }
 
 #vipin - to accept the AWS Dx connection 
@@ -73,7 +73,7 @@ resource "aws_dx_connection_confirmation" "ToAccepttheDxconnectioninAWSside" {
 
 #vipin - to fetch the VLAN ID of AWS Dx connection 
 locals {
-    vlan_tags = flatten([
+  vlan_tags = flatten([
     for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side : [
       for ap in z.access_point : [
         for lp in ap.link_protocol : lp.vlan_tag
@@ -81,23 +81,23 @@ locals {
     ]
   ])
 
-    create_resource = length(local.vlan_tags) > 0
+  create_resource = length(local.vlan_tags) > 0
 }
 
 data "aws_dx_connection" "tofetchVLANID" {
-  depends_on = [ equinix_fabric_connection.L2_FCRSG_to_AWS ]
-  name = "L2_FCRSG_to_AWS"
+  depends_on = [equinix_fabric_connection.L2_FCRSG_to_AWS]
+  name       = "L2_FCRSG_to_AWS"
 }
 
 output "vlan_id" {
-value = data.aws_dx_connection.tofetchVLANID.vlan_id
+  value = data.aws_dx_connection.tofetchVLANID.vlan_id
 }
 
 #vipin - to create Layer 3 on AWS VIF 
 
 resource "aws_dx_private_virtual_interface" "Create_AWS_SG_PrivateVIF" {
-  depends_on = [aws_dx_connection_confirmation.ToAccepttheDxconnectioninAWSside ]
-  connection_id    = local.provider_connection_ids[0] 
+  depends_on       = [aws_dx_connection_confirmation.ToAccepttheDxconnectioninAWSside]
+  connection_id    = local.provider_connection_ids[0]
   name             = "AWS_VIF_Creation_SG"
   vlan             = data.aws_dx_connection.tofetchVLANID.vlan_id
   address_family   = "ipv4"
@@ -107,7 +107,7 @@ resource "aws_dx_private_virtual_interface" "Create_AWS_SG_PrivateVIF" {
   customer_address = "192.168.1.1/30"
   mtu              = 1500
   vpn_gateway_id   = "vgw-09be1bd5f63e75f5c"
-} 
+}
 
 #vipin - to create Layer 3 on BGP 
 resource "equinix_fabric_routing_protocol" "L3_FCRSG_to_AWS_Equinixside" {
@@ -134,7 +134,7 @@ resource "equinix_fabric_routing_protocol" "L3_FCRSG_to_AWS_AWSside" {
     enabled          = true
   }
 
-}
+}*/
 
 
 
