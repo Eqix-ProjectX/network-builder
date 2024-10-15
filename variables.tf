@@ -15,7 +15,6 @@ variable "connection_name" {}*/
 variable "purchase_order_number" {}
 variable "project_id" {}
 variable "notifications_emails" {}
-variable "emails" {}
 
 
 #vipin - aws details 
