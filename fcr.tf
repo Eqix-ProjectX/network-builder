@@ -1,5 +1,38 @@
-##vipin - module to spin up FCR
-/*data "terraform_remote_state" "fcr_id" {
+## to supply provider packages 
+
+terraform {
+  required_providers {
+    equinix = {
+      source  = "equinix/equinix"
+      version = "2.4.0"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.63.1"
+
+    }
+  }
+}
+
+## to supply Equinix Credentials 
+
+provider "equinix" {
+
+  client_id     = var.ecx_client_id
+  client_secret = var.ecx_client_secret
+}
+
+## to supply AWS Credentials 
+
+provider "aws" {
+  region     = var.aws_zside_seller_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+}
+
+## to call FCR UID from Terraform cloud Remote state file 
+
+data "terraform_remote_state" "fcr_id" {
   backend = "remote"
 
   config = {
@@ -10,15 +43,23 @@
   }
 }
 
-##vipin - to create Layer2 connection from FCR to AWS 
-resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
-  name = "L2_FCRSG_to_AWS"
-  type = "IP_VC"
+## to create random VC connection name for FCR to AWS 
+
+resource "random_pet" "this" {
+  length = 2
+}
+
+
+## to create VC connection from FCR to AWS 
+
+resource "equinix_fabric_connection" "Localname_fcr2aws" {
+  name = "${var.connection_name}-${random_pet.this.id}" 
+  type = var.connection_type
   notifications {
-    type   = "ALL"
-    emails = [var.email]
+    type   = var.notifications_type
+    emails = var.notifications_emails
   }
-  bandwidth = var.FCRtoAWSspeed
+  bandwidth = var.bandwidth
   order {
     purchase_order_number = var.purchase_order_number
   }
@@ -27,7 +68,6 @@ resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
       type = "CLOUD_ROUTER"
       router {
         uuid = data.terraform_remote_state.fcr_id.outputs.fcr_id
-        //uuid = module.FCRcreation.fabric_cloud_router_id
       }
 
     }
@@ -35,98 +75,101 @@ resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
 
   z_side {
     access_point {
-      type               = "SP"
-      authentication_key = var.authentication_key
-      seller_region      = var.seller_region
+      type               = var.aws_zside_ap_type
+      authentication_key = var.aws_zside_authentication_key
+      seller_region      = var.aws_zside_seller_region
       profile {
         type = "L2_PROFILE"
-        uuid = var.profile_uuid
+        uuid = var.aws_zside_profile_uuid
       }
       location {
-        metro_code = var.awslocation
+        metro_code = var.aws_zide_location
       }
     }
   }
 }
 
-#vipin - to fecth the AWS Dx connection id
-locals {
+## data source to fetch AWS Dx connection ID 
 
-
-  z_side_list = [
-    for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side :
-    tolist(z.access_point)[0]
-
+data "aws_dx_connection" "aws_connection" {
+  depends_on = [
+    equinix_fabric_connection.Localname_fcr2aws
   ]
+  name = "${var.connection_name}-${random_pet.this.id}" 
+}
 
-  provider_connection_ids = [
-    for access_point in [
-      for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side : tolist(z.access_point)[0]
-    ] : access_point.provider_connection_id
+## to accept AWS Dx Connection
+
+resource "aws_dx_connection_confirmation" "localname2" {
+depends_on = [
+    equinix_fabric_connection.Localname_fcr2aws
   ]
+  connection_id = data.aws_dx_connection.aws_connection.id
 }
 
-#vipin - to accept the AWS Dx connection 
-resource "aws_dx_connection_confirmation" "ToAccepttheDxconnectioninAWSside" {
-  connection_id = local.provider_connection_ids[0]
+
+
+resource "aws_vpc" "main" {
+  cidr_block = var.aws_vpc_cidr
+  tags = {
+    Name = var.aws_vpc_name
+  }
 }
 
-#vipin - to fetch the VLAN ID of AWS Dx connection 
-locals {
-  vlan_tags = flatten([
-    for z in equinix_fabric_connection.L2_FCRSG_to_AWS.z_side : [
-      for ap in z.access_point : [
-        for lp in ap.link_protocol : lp.vlan_tag
-      ]
-    ]
-  ])
-
-  create_resource = length(local.vlan_tags) > 0
+resource "aws_subnet" "private" {
+  depends_on = [aws_vpc.main ]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.aws_subnet_cidr
+   tags = {
+    Name = var.aws_subnet_name
+  }
 }
 
-data "aws_dx_connection" "tofetchVLANID" {
-  depends_on = [equinix_fabric_connection.L2_FCRSG_to_AWS]
-  name       = "L2_FCRSG_to_AWS"
+resource "aws_vpn_gateway" "vgw" {
+   depends_on = [aws_subnet.private ]
+  vpc_id = aws_vpc.main.id
+tags = {
+    Name = var.aws_vpg_name
+  }
 }
 
-output "vlan_id" {
-  value = data.aws_dx_connection.tofetchVLANID.vlan_id
+## to configure AWS VIF 
+
+resource "aws_dx_private_virtual_interface" "aws_virtual_interface" {
+  depends_on = [
+    equinix_fabric_connection.Localname_fcr2aws,
+    aws_vpn_gateway.vgw,aws_dx_connection_confirmation.localname2
+  ]
+  connection_id    = data.aws_dx_connection.aws_connection.id
+  name             = var.aws_vif_name
+  vlan             = data.aws_dx_connection.aws_connection.vlan_id
+  address_family   = var.aws_vif_address_family
+  bgp_asn          = var.aws_vif_bgp_asn
+  amazon_address   = var.aws_vif_amazon_address
+  customer_address = var.aws_vif_customer_address
+  bgp_auth_key     = var.aws_vif_bgp_auth_key
+  vpn_gateway_id   = aws_vpn_gateway.vgw.id
 }
 
-#vipin - to create Layer 3 on AWS VIF 
+## to configure BGP on FCR 
 
-resource "aws_dx_private_virtual_interface" "Create_AWS_SG_PrivateVIF" {
-  depends_on       = [aws_dx_connection_confirmation.ToAccepttheDxconnectioninAWSside]
-  connection_id    = local.provider_connection_ids[0]
-  name             = "AWS_VIF_Creation_SG"
-  vlan             = data.aws_dx_connection.tofetchVLANID.vlan_id
-  address_family   = "ipv4"
-  bgp_asn          = 24116
-  bgp_auth_key     = "XXYYFFDDCC"
-  amazon_address   = "192.168.1.2/30"
-  customer_address = "192.168.1.1/30"
-  mtu              = 1500
-  vpn_gateway_id   = "vgw-09be1bd5f63e75f5c"
-}
-
-#vipin - to create Layer 3 on BGP 
-resource "equinix_fabric_routing_protocol" "L3_FCRSG_to_AWS_Equinixside" {
-  connection_uuid = equinix_fabric_connection.L2_FCRSG_to_AWS.id
+ resource "equinix_fabric_routing_protocol" "localnameforBGPonFCR" {
+  connection_uuid = equinix_fabric_connection.Localname_fcr2aws.id
   type            = "DIRECT"
   name            = "L3_FCRSG_to_AWS_Equinixside"
   direct_ipv4 {
-    equinix_iface_ip = "192.168.1.1/30"
+    equinix_iface_ip = var.aws_vif_customer_address
 
   }
 }
 
-resource "equinix_fabric_routing_protocol" "L3_FCRSG_to_AWS_AWSside" {
+resource "equinix_fabric_routing_protocol" "LocalnameforBGPonVIF" {
   depends_on = [
-    equinix_fabric_routing_protocol.L3_FCRSG_to_AWS_Equinixside
+    equinix_fabric_routing_protocol.localnameforBGPonFCR
   ]
-  connection_uuid = equinix_fabric_connection.L2_FCRSG_to_AWS.id
+  connection_uuid = equinix_fabric_connection.Localname_fcr2aws.id
   type            = "BGP"
-  customer_asn    = 64520
+  customer_asn    = 64512
   name            = "L3_FCRSG_to_AWS_AWSside"
   bgp_auth_key    = "XXYYFFDDCC"
   bgp_ipv4 {
@@ -134,66 +177,4 @@ resource "equinix_fabric_routing_protocol" "L3_FCRSG_to_AWS_AWSside" {
     enabled          = true
   }
 
-}*/
-
-
-
-
-##vipin - to create Azure Service Key 
-/*
-resource "azurerm_express_route_circuit" "ERSkey_Creation_process" {
-  name                  = var.ERCircuitName
-  resource_group_name   = var.Azureresourcegroupname
-  location              = var.Azurelocation
-  service_provider_name = "Equinix"
-  peering_location      = var.Azurepeeringlocation
-  bandwidth_in_mbps     = var.ERbandwidth
-
-  sku {
-    tier   = "Standard"
-    family = "MeteredData"
-  }
-
-  tags = {
-    environment = "var.environment"
-  }
 }
-
-##vipin - to create Layer2 connection from FCR to Azure
-resource "equinix_fabric_connection" "L2_FCRSV_to_Azure" {
-  name = "L2_FCRSV_to_Azure"
-  type = "IP_VC"
-  notifications {
-    type   = "ALL"
-    emails = [var.email]
-  }
-  bandwidth = var.FCRtoAzurespeed
-  order {
-    purchase_order_number = var.purchase_order_number
-  }
-  a_side {
-    access_point {
-      type = "CLOUD_ROUTER"
-      router {
-        uuid = data.terraform_remote_state.fcr_id.outputs.fcr_id
-      }
-
-    }
-  }
-
-  z_side {
-    access_point {
-      type               = "SP"
-      authentication_key = azurerm_express_route_circuit.ERSkey_Creation_process.service_key
-      peering_type       = "PRIVATE"
-      profile {
-        type = "L2_PROFILE"
-        uuid = "a1390b22-bbe0-4e93-ad37-85beef9d254d"
-      }
-      location {
-        metro_code = var.Azuremetrocode
-      }
-    }
-  }
-}
-*/
