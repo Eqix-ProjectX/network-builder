@@ -371,3 +371,11 @@ module "aws-connection" {
   amazon_ip_address     = var.amazon_ip_address
   customer_ip_address   = var.customer_ip_address
 }
+
+module "ec2" {
+  source        = "github.com/Eqix-ProjectX/terraform-equinix-virtualconnection-aws-components/"
+  # aws_region    = var.aws_region
+  aws_vpc_id    = module.aws-connection.AWS_VPC_id
+  aws_subnet_id = module.aws-connection.AWS_Subnet_id
+  aws_vpg_id    = module.aws-connection.AWS_VPG_id
+}
