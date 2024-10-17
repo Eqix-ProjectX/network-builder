@@ -33,7 +33,7 @@ output "token_sec" {
 output "AWS_VPC_id" {
   value = module.aws-connection.AWS_VPC_id
 }
-output "AWS_VPC_id" {
+output "AWS_Subnet_id" {
   value = module.aws-connection.AWS_Subnet_id
 }
 output "AWS_VPG_id" {
