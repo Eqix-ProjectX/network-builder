@@ -30,3 +30,12 @@ output "token_sec" {
   value     = equinix_metal_connection.vrf2vd.service_tokens[1].id
   sensitive = true
 }
+output "AWS_VPC_id" {
+  value = module.aws-connection.AWS_VPC_id
+}
+output "AWS_VPC_id" {
+  value = module.aws-connection.AWS_Subnet_id
+}
+output "AWS_VPC_id" {
+  value = module.aws-connection.AWS_VPG_id
+}
