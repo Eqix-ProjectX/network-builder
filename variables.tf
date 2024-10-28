@@ -1,13 +1,15 @@
 variable "username" {}
-variable "int" {}
-variable "int_desc" {}
-variable "bw" {}
+variable "int_vrf" {}
+variable "int_desc_vrf" {}
+variable "int_desc_aws" {}
+variable "bw_vrf" {}
 variable "project_id" {}
 variable "metro_code" {}
 variable "sec_metro_code" {}
 variable "vnf_asn" {}
-variable "neighbor_desc_pri" {}
-variable "neighbor_desc_sec" {}
+variable "neighbor_desc_pri_vrf" {}
+variable "neighbor_desc_sec_vrf" {}
+variable "neighbor_desc_pri_aws" {}
 variable "pri_vc" {}
 variable "sec_vc" {}
 variable "emails" {}
@@ -96,3 +98,25 @@ variable "aws_vif_name" {}
 variable "aws_bgp_auth_key" {}
 variable "amazon_ip_address" {}
 variable "customer_ip_address" {}
+
+#GCP
+variable "google_region" {}
+variable "google_project_id" {}
+variable "google_zone" {}
+variable "gcp_vpc_name" {}
+# variable "google_network_mtu" {}
+variable "google_router_name" {}
+variable "google_router_bgp_asn" {}
+variable "google_interconnect_name" {}
+# variable "google_interconnect_type" {}
+variable "google_interconnect_edge_availability_domain" {}
+#Fabric Connection
+variable "bandwidth_gcp" {}
+variable "connection_name_gcp" {}
+# variable "connection_type" {}
+# variable "notifications_type" {}
+# variable "notifications_emails" {}
+# variable "bandwidth" {}
+# variable "purchase_order_number" {}
+# variable "zside_ap_type" {}
+variable "zside_location" {}
