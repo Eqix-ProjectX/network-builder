@@ -1,10 +1,4 @@
 
-
-provider "equinix" {
-
-  auth_token =var.metal_token
-}
-
 #to create Metal VLAN
 resource "equinix_metal_vlan" "vlan-server" {
   metro       = var.metal_metro
