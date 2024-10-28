@@ -22,37 +22,23 @@
 #   value = module.ne.ssh_ip_vd_sec
 # }
 
-/*output "token_pri" {
-  value     = equinix_metal_connection.vrf2vd.service_tokens[0].id
-  sensitive = true
-}
-output "token_sec" {
-  value     = equinix_metal_connection.vrf2vd.service_tokens[1].id
-  sensitive = true
-}*/
-
-
-# for AWS connection
-output "fcr_2_aws_vc_id" {
-  value = equinix_fabric_connection.Localname_fcr2aws.id
-}
-
-output "AWS_DX_id" {
-value = data.aws_dx_connection.aws_connection.id
-}
-
-output "AWS_VPG_id" {
-  value = aws_vpn_gateway.vgw.id
-}
-
-output "AWS_VPC_id" {
-  value = aws_vpc.main.id
-}
-
-output "AWS_Subnet_id" {
-  value = aws_subnet.private.id
-}
-
-output "AWS_VIF_VLAN_id" {
-  value = data.aws_dx_connection.aws_connection.vlan_id
+# output "token_pri" {
+#   value     = equinix_metal_connection.vrf2vd.service_tokens[0].id
+#   sensitive = true
+# }
+# output "token_sec" {
+#   value     = equinix_metal_connection.vrf2vd.service_tokens[1].id
+#   sensitive = true
+# }
+# output "AWS_VPC_id" {
+#   value = module.aws-connection.AWS_VPC_id
+# }
+# output "AWS_Subnet_id" {
+#   value = module.aws-connection.AWS_Subnet_id
+# }
+# output "AWS_VPG_id" {
+#   value = module.aws-connection.AWS_VPG_id
+# }
+output "vpc_gcp" {
+  value = google_compute_network.vpc_network.id
 }
