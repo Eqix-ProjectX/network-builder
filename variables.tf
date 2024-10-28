@@ -1,3 +1,4 @@
+/*
 variable "username" {}
 variable "int_vrf" {}
 variable "int_desc_vrf" {}
@@ -35,15 +36,6 @@ variable "purchase_order_number" {}
 # variable "FCRlocation" {}
 # variable "FCRemail" {}
 
-variable "notifications_type" {
-  description = "Notification Type - ALL is the only type currently supported"
-  type        = string
-  default     = "ALL"
-}
-variable "bandwidth" {
-  description = "Connection bandwidth in Mbps"
-  type        = number
-}
 # variable "zside_ap_authentication_key" {
 #   description = "Authentication key for provider based connections"
 #   type        = string

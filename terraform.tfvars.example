@@ -1,0 +1,30 @@
+ecx_client_id = "abcd_sample"  
+ecx_client_secret = "defg_sample"
+aws_access_key = "aws_asdadsad_sample"
+aws_secret_key = "aws_asdadasdasd_sample"
+connection_name = "VC"
+connection_type = "IP_VC"
+notifications_type = "ALL"
+notifications_emails = ["email@test"]
+bandwidth = 50 
+purchase_order_number = "1-323292"
+aws_zside_authentication_key = "213131321_sample"
+aws_zside_seller_region = "us-east-1"
+aws_zside_ap_type = "SP"
+aws_zside_profile_uuid = "aw2131312321_sample"
+aws_zide_location = "DC"
+aws_gateway_name = "vgw-sample"
+aws_gateway_asn = 64520
+aws_vif_name = "vifname_fcr2aws_sample"
+aws_vif_address_family = "ipv4"
+aws_vif_bgp_asn = 13531
+aws_vif_amazon_address = "192.168.1.2/30"
+aws_vif_customer_address = "192.168.1.1/30" 
+aws_vif_bgp_auth_key = "XXYYFFDDCC"
+
+
+aws_vpc_cidr = "10.0.0.0/16"
+aws_vpc_name = "sample_name"
+aws_subnet_cidr = "10.0.1.0/24"
+aws_subnet_name = "sample_name01"
+aws_vpg_name = "sample_name"
