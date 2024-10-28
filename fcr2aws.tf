@@ -1,31 +1,7 @@
-## to supply provider packages 
-
-terraform {
-  required_providers {
-    equinix = {
-      source  = "equinix/equinix"
-      version = "2.4.0"
-    }
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.63.1"
-
-    }
-  }
-}
-
-## to supply Equinix Credentials 
-
-provider "equinix" {
-
-  client_id     = var.ecx_client_id
-  client_secret = var.ecx_client_secret
-}
-
 ## to supply AWS Credentials 
-
+/*
 provider "aws" {
-  region     = var.aws_zside_seller_region
+  region     = var.seller_region
 }
 
 ## to call FCR UID from Terraform cloud Remote state file 
@@ -51,13 +27,13 @@ resource "random_pet" "this" {
 ## to create VC connection from FCR to AWS 
 
 resource "equinix_fabric_connection" "Localname_fcr2aws" {
-  name = "${var.connection_name}-${random_pet.this.id}" 
-  type = var.connection_type
+  name = "${var.connection_name_fcr2aws}-${random_pet.this.id}" 
+  type = "IP_VC"
   notifications {
-    type   = var.notifications_type
-    emails = var.notifications_emails
+    type   = "ALL"
+    emails = var.emails
   }
-  bandwidth = var.bandwidth
+  bandwidth = var.bandwidth_gcp
   order {
     purchase_order_number = var.purchase_order_number
   }
@@ -73,15 +49,15 @@ resource "equinix_fabric_connection" "Localname_fcr2aws" {
 
   z_side {
     access_point {
-      type               = var.aws_zside_ap_type
-      authentication_key = var.aws_zside_authentication_key
-      seller_region      = var.aws_zside_seller_region
+      type               = "SP"
+      authentication_key = var.authentication_key_aws
+      seller_region      = var.seller_region
       profile {
         type = "L2_PROFILE"
-        uuid = var.aws_zside_profile_uuid
+        uuid = var.profile_uuid_aws
       }
       location {
-        metro_code = var.aws_zide_location
+        metro_code = var.metro_code
       }
     }
   }
@@ -93,7 +69,7 @@ data "aws_dx_connection" "aws_connection" {
   depends_on = [
     equinix_fabric_connection.Localname_fcr2aws
   ]
-  name = "${var.connection_name}-${random_pet.this.id}" 
+  name = "${var.connection_name_fcr2aws}-${random_pet.this.id}" 
 }
 
 ## to accept AWS Dx Connection
@@ -107,29 +83,29 @@ depends_on = [
 
 
 
-resource "aws_vpc" "main" {
-  cidr_block = var.aws_vpc_cidr
-  tags = {
-    Name = var.aws_vpc_name
-  }
-}
+# resource "aws_vpc" "main" {
+#   cidr_block = var.aws_vpc_cidr
+#   tags = {
+#     Name = var.aws_vpc_name
+#   }
+# }
 
-resource "aws_subnet" "private" {
-  depends_on = [aws_vpc.main ]
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.aws_subnet_cidr
-   tags = {
-    Name = var.aws_subnet_name
-  }
-}
+# resource "aws_subnet" "private" {
+#   depends_on = [aws_vpc.main ]
+#   vpc_id            = aws_vpc.main.id
+#   cidr_block        = var.aws_subnet_cidr
+#    tags = {
+#     Name = var.aws_subnet_name
+#   }
+# }
 
-resource "aws_vpn_gateway" "vgw" {
-   depends_on = [aws_subnet.private ]
-  vpc_id = aws_vpc.main.id
-tags = {
-    Name = var.aws_vpg_name
-  }
-}
+# resource "aws_vpn_gateway" "vgw" {
+#    depends_on = [aws_subnet.private ]
+#   vpc_id = aws_vpc.main.id
+# tags = {
+#     Name = var.aws_vpg_name
+#   }
+# }
 
 ## to configure AWS VIF 
 
@@ -176,3 +152,4 @@ resource "equinix_fabric_routing_protocol" "LocalnameforBGPonVIF" {
   }
 
 }
+*/

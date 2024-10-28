@@ -1,4 +1,4 @@
-/*
+
 variable "username" {}
 variable "int_vrf" {}
 variable "int_desc_vrf" {}
@@ -14,11 +14,9 @@ variable "neighbor_desc_pri_aws" {}
 variable "pri_vc" {}
 variable "sec_vc" {}
 variable "emails" {}
-variable "connection_name" {}
+variable "connection_name_fcr2aws" {}
 
 #vipin - aws details 
-# variable "aws_access_key" {}
-# variable "aws_secret_key" {}
 # variable "profile_uuid" {}
 # variable "authentication_key" {}
 #vipin ecx details 

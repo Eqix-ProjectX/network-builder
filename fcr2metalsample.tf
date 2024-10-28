@@ -1,5 +1,5 @@
 
-#to create Metal VLAN
+/*#to create Metal VLAN
 resource "equinix_metal_vlan" "vlan-server" {
   metro       = var.metal_metro
   project_id  = var.metal_project_id
@@ -84,3 +84,4 @@ resource "equinix_metal_port_vlan_attachment" "vlan_attachment" {
   port_name   = "bond0"
   vlan_vnid = equinix_metal_vlan.vlan-server.vxlan
 }
+*/

@@ -305,28 +305,28 @@ terraform {
 # }
 # */
 
-# module "aws-connection" {
-#   source                = "github.com/Eqix-ProjectX/terraform-equinix-virtualconnection-aws/"
-#   connection_name       = var.connection_name_aws
-#   connection_type       = var.connection_type
-#   notifications_emails  = var.emails
-#   bandwidth             = var.bandwidth_aws
-#   purchase_order_number = var.purchase_order_number
-#   device_uuid           = data.terraform_remote_state.ne.outputs.vd_uuid
-#   interface_number      = var.interface_number_aws
-#   authentication_key    = var.authentication_key_aws
-#   profile_uuid          = var.profile_uuid_aws
-#   metro                 = var.metro_code
-#   aws_vpc_cidr          = var.aws_vpc_cidr
-#   seller_region         = var.seller_region
-#   aws_region            = var.aws_region
-#   aws_vpc_name          = var.aws_vpc_name
-#   aws_subnet_name       = var.aws_subnet_name
-#   aws_subnet_cidr       = var.aws_subnet_cidr
-#   aws_vpg_name          = var.aws_vpg_name
-#   aws_vif_name          = var.aws_vif_name
-#   customer_asn          = var.vnf_asn
-#   aws_bgp_auth_key      = var.aws_bgp_auth_key
-#   amazon_ip_address     = var.amazon_ip_address
-#   customer_ip_address   = var.customer_ip_address
-# }
+module "aws-connection" {
+  source                = "github.com/Eqix-ProjectX/terraform-equinix-virtualconnection-aws/"
+  connection_name       = var.connection_name_aws
+  connection_type       = var.connection_type
+  notifications_emails  = var.emails
+  bandwidth             = var.bandwidth_aws
+  purchase_order_number = var.purchase_order_number
+  device_uuid           = data.terraform_remote_state.ne.outputs.vd_uuid
+  interface_number      = var.interface_number_aws
+  authentication_key    = var.authentication_key_aws
+  profile_uuid          = var.profile_uuid_aws
+  metro                 = var.metro_code
+  aws_vpc_cidr          = var.aws_vpc_cidr
+  seller_region         = var.seller_region
+  aws_region            = var.aws_region
+  aws_vpc_name          = var.aws_vpc_name
+  aws_subnet_name       = var.aws_subnet_name
+  aws_subnet_cidr       = var.aws_subnet_cidr
+  aws_vpg_name          = var.aws_vpg_name
+  aws_vif_name          = var.aws_vif_name
+  customer_asn          = var.vnf_asn
+  aws_bgp_auth_key      = var.aws_bgp_auth_key
+  amazon_ip_address     = var.amazon_ip_address
+  customer_ip_address   = var.customer_ip_address
+}
