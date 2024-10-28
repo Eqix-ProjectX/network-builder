@@ -3,9 +3,9 @@ terraform {
     equinix = {
       source = "equinix/equinix"
     }
-    /*iosxe = {
+    iosxe = {
       source = "CiscoDevNet/iosxe"
-    }*/
+    }
   }
   cloud {
 
@@ -17,7 +17,7 @@ terraform {
   }
 }
 
-/*provider "iosxe" {
+provider "iosxe" {
   alias    = "vd_pri"
   username = var.username
   password = data.terraform_remote_state.ne.outputs.vd_password
@@ -119,7 +119,7 @@ resource "iosxe_bgp_neighbor" "neighbor_sec" {
   shutdown                = false
   disable_connected_check = false
   log_neighbor_changes    = true
-}*/
+}
 
 # resource "iosxe_save_config" "write_pri" {
 #   provider = iosxe.vd_pri
@@ -136,7 +136,7 @@ resource "iosxe_bgp_neighbor" "neighbor_sec" {
 #   ]
 # }
 
-/*resource "equinix_fabric_connection" "vd2vrf_pri" {
+resource "equinix_fabric_connection" "vd2vrf_pri" {
   name = var.pri_vc
   type = "EVPL_VC"
   redundancy {
@@ -199,7 +199,7 @@ resource "equinix_fabric_connection" "vd2vrf_sec" {
     }
   }
 }
-*/
+
 /*
 resource "time_sleep" "wait_2_min" {
   create_duration = "2m"
@@ -210,7 +210,7 @@ resource "time_sleep" "wait_2_min" {
 }
 */
 
-/*resource "equinix_metal_connection" "vrf2vd" {
+resource "equinix_metal_connection" "vrf2vd" {
   name          = var.connection_name
   project_id    = var.project_id
   metro         = var.metro_code
@@ -222,7 +222,7 @@ resource "time_sleep" "wait_2_min" {
     data.terraform_remote_state.bgp.outputs.vrf_sec
   ]
   service_token_type = "z_side"
-}*/
+}
 
 /* commented out portion of BGP peering setup for now -TF not supported-
 resource "equinix_metal_virtual_circuit" "peer_pri" {
@@ -252,114 +252,3 @@ resource "equinix_metal_virtual_circuit" "peer_sec" {
 }
 */
 
-##vipin - module to spin up FCR
-/*module "FCRcreation" {
-  source               = "github.com/Eqix-ProjectX/network-apac.git"
-  FCRname              = var.FCRRoutername
-  FCRlocation          = var.FCRlocation
-  FCRtype              = "XF_ROUTER"
-  emails               = var.FCRemail
-  Equinixpurchaseorder = var.FCRpurchaseorder
-  FCRmetrocode         = var.FCRmetrocode
-  FCRpackage           = "STANDARD"
-  Equinixprojectid     = var.FCRprojectid
-  account_number       = var.FCRaccountnumber
-
-}*/
-
-##vipin - to create Layer2 connection from FCR to AWS 
-/*resource "equinix_fabric_connection" "L2_FCRSG_to_AWS" {
-  name = "L2_FCRSG_to_AWS"
-  type = "IP_VC"
-  notifications {
-    type   = "ALL"
-    emails = [var.email]
-  }
-  bandwidth = var.FCRtoAWSspeed
-  order {
-    purchase_order_number = var.purchase_order_number
-  }
-  a_side {
-    access_point {
-      type = "CLOUD_ROUTER"
-      router {
-        uuid = module.FCRcreation.fabric_cloud_router_id
-      }
-
-    }
-  }
-
-  z_side {
-    access_point {
-      type               = "SP"
-      authentication_key = var.authentication_key
-      seller_region      = var.seller_region
-      profile {
-        type = "L2_PROFILE"
-        uuid = var.profile_uuid
-      }
-      location {
-        metro_code = var.awslocation
-      }
-    }
-  }
-}*/
-
-
-##vipin - to create Azure Service Key 
-/*resource "azurerm_express_route_circuit" "ERSkey_Creation_process" {
-  name                  = var.ERCircuitName
-  resource_group_name   = var.Azureresourcegroupname
-  location              = var.Azurelocation
-  service_provider_name = "Equinix"
-  peering_location      = var.Azurepeeringlocation
-  bandwidth_in_mbps     = var.ERbandwidth
-
-  sku {
-    tier   = "Standard"
-    family = "MeteredData"
-  }
-
-  tags = {
-    environment = "var.environment"
-  }
-}*/
-
-##vipin - to create Layer2 connection from FCR to Azure
-/*resource "equinix_fabric_connection" "L2_FCRSV_to_Azure" {
-  name = "L2_FCRSV_to_Azure"
-  type = "IP_VC"
-  notifications {
-    type   = "ALL"
-    emails = [var.email]
-  }
-  bandwidth = var.FCRtoAzurespeed
-  order {
-    purchase_order_number = var.purchase_order_number
-  }
-  a_side {
-    access_point {
-      type = "CLOUD_ROUTER"
-      router {
-        uuid = module.FCRcreation.fabric_cloud_router_id
-      }
-
-    }
-  }
-
-  z_side {
-    access_point {
-      type               = "SP"
-      authentication_key = azurerm_express_route_circuit.ERSkey_Creation_process.service_key
-      peering_type       = "PRIVATE"
-      profile {
-        type = "L2_PROFILE"
-        uuid = "a1390b22-bbe0-4e93-ad37-85beef9d254d"
-      }
-      location {
-        metro_code = var.Azuremetrocode
-      }
-    }
-  }
-}
-*/
