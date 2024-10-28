@@ -26,8 +26,6 @@ provider "equinix" {
 
 provider "aws" {
   region     = var.aws_zside_seller_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
 }
 
 ## to call FCR UID from Terraform cloud Remote state file 
